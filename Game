@@ -1,0 +1,106 @@
+
+import java.util.*;
+
+public class Game {
+    static ArrayList<Integer> cardsDeck = new ArrayList<>();
+    static LinkedStack<Integer> cardStack = new LinkedStack<>();
+    static LinkedStack<Integer> p1cards = new LinkedStack<>();
+    static LinkedStack<Integer> p2cards = new LinkedStack<>();
+    static LinkedStack<Integer> p1cardsWon = new LinkedStack<>();
+    static LinkedStack<Integer> p2cardsWon = new LinkedStack<>();
+
+    public static void main(String[] args) {
+        initializeCards();
+        shuffleCards();
+
+        // Displays shuffled full deck of cards
+        System.out.println("Original shuffled deck of cards: ");
+        displayDeck();
+
+        initializeCardStack();
+
+        System.out.println("\n\nDealing 26 cards to player 1 and player 2: ");
+        dealCards();
+
+
+        System.out.println("\nPlayer 1 now has " + p1cards.length() + " cards.");
+        System.out.println("Player 1 cards are: ");
+        System.out.println(p1cards);
+
+
+        System.out.println("Player 2 now has " + p2cards.length() + " cards.");
+        System.out.println("Player 2 cards are: ");
+        System.out.println(p2cards + "\n");
+
+        //begin a while loop that will run until either p1cards or p2cards reaches 0
+        while (p1cards.length() > 0|| p2cards.length() > 0) {
+            //display drawn cards for each round
+            System.out.println("Player 1 has drawn " + p1cards.peek());
+            System.out.println("Player 2 has drawn " + p2cards.peek() + "\n");
+
+            //use an if statement to determine what stack the won cards are pushed into
+            //if player 1 wins
+            if (p1cards.peek() < p2cards.peek()) {
+                p1cardsWon.push(p1cards.pop());
+                p1cardsWon.push(p2cards.pop());
+                //if player 2 wins
+            } else {
+                p2cardsWon.push(p1cards.pop());
+                p2cardsWon.push(p2cards.pop());
+            }
+
+        }
+        //use an if statement to test the length of the stacks of won cards
+        //output the length of each stack and then determine the winner
+        if(p1cardsWon.length() > p2cardsWon.length()){
+            System.out.println("Player 1 has captured " + p1cardsWon.length() + " cards.");
+            System.out.println("Player 2 has captured " + p2cardsWon.length() + " cards.\n");
+            System.out.println("Player 1 has won the game!");
+
+        }
+        else {
+            System.out.println("Player 1 has captured " + p1cardsWon.length() + " cards.");
+            System.out.println("Player 2 has captured " + p2cardsWon.length() + " cards.\n");
+            System.out.println("Player 2 has won the game!");
+        }
+    }
+
+
+    static void initializeCards() {
+        // Deck of cards is filled with integers 0 through 51
+        for (int i= 0; i<52; i++) {
+            cardsDeck.add(i);
+        }
+    }
+
+    static void shuffleCards() {
+        // Shuffle the ArrayList holding the initial deck of cards
+        Collections.shuffle(cardsDeck);
+    }
+
+    static void displayDeck() {
+        // Simple method to display all items in deck of cards
+        for (int card: cardsDeck) {
+            System.out.print(card + " ");
+        }
+    }
+
+    static void initializeCardStack() {
+        // The initial ArrayList was used to facilitate shuffling, now we use the Stack ADT to implement the rest of our game
+        for (int i= 0; i<52; i++) {
+            cardStack.push(cardsDeck.get(i));
+        }
+    }
+
+    static void dealCards() {
+        // Deal cards to each player
+        for (int i= 0; i<52; i++) {
+            if (i%2 == 0) {
+                p1cards.push(cardStack.pop());
+            } else {
+                p2cards.push(cardStack.pop());
+            }
+        }
+    }
+
+}
